@@ -3,11 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <title>Gamedev Canvas Workshop</title>
-    <h1>This is FredW<h1></h1>
-    <h2>It is my game I made myself so I can earn money<h2>
     <style>
       * { padding: 0; margin: 0; }
-      canvas { background: rgb(255, 0, 0); display: block; margin: 0 auto; }
+      canvas { background: rgb(100, 100, 100); display: block; margin: 0 auto; }
     </style>
 </head>
 <body>
@@ -67,7 +65,7 @@ function keyDownHandler(e) {
 }
 
 function keyUpHandler(e) {
-    if(e.key == "Right" || e.key == "ArrowRight"|| e.key == "MiddleMouseDown") {
+    if(e.key == "Right" || e.key == "ArrowRight" ){
         rightPressed = false;
     }
     else if(e.key == "Left" || e.key == "ArrowLeft") {
