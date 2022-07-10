@@ -1,6 +1,6 @@
 # Youtube Book
 
-## Chapter 8 
+## Chapter 8 Fixing it in Post: The Edit
 1. The tools on macOS and Windows for video editing aren't the same:
     1. For macOS there are iMovie, QuickTimePlayer, Camtasia, Final CutPro
     2. For Windows there are Adobe Premiere, Vegas, Pinacle Studio, CyberLink PowerDiretor and OpenShot.
