@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3x3 Match Game</title>
+<title>3x3 Match-3 Game</title>
 <style>
   body {
     display: flex;
@@ -63,17 +63,17 @@ const game = document.getElementById('game');
 const winImage = document.getElementById('winImage');
 
 let tiles = [];
-let firstSelection = null;
+let selection = [];
 
-// Generate 3x3 grid with 3 pairs + 1 extra random
-let values = [1,1,2,2,3,3,4,5,6]; 
+// Generate 3x3 grid with 3 sets of matching numbers
+let values = [1,1,1,2,2,2,3,3,3]; 
 values.sort(() => Math.random() - 0.5);
 
 for (let i = 0; i < 9; i++) {
   const tile = document.createElement('div');
   tile.classList.add('tile');
   tile.dataset.value = values[i];
-  tile.textContent = values[i]; // For demonstration, shows value
+  tile.textContent = values[i]; // Show value for now
   tile.addEventListener('click', () => selectTile(tile));
   game.appendChild(tile);
   tiles.push(tile);
@@ -82,29 +82,27 @@ for (let i = 0; i < 9; i++) {
 function selectTile(tile) {
   if (tile.classList.contains('hidden')) return;
 
-  if (!firstSelection) {
-    firstSelection = tile;
+  if (!selection.includes(tile)) {
+    selection.push(tile);
     tile.style.transform = 'scale(1.1)';
-  } else if (firstSelection === tile) {
-    // Same tile clicked twice
-    return;
-  } else {
-    if (firstSelection.dataset.value === tile.dataset.value) {
-      // Match found
-      firstSelection.classList.add('hidden');
-      tile.classList.add('hidden');
+  }
+
+  if (selection.length === 3) {
+    const val = selection[0].dataset.value;
+    if (selection.every(t => t.dataset.value === val)) {
+      // All 3 match → hide them
+      selection.forEach(t => t.classList.add('hidden'));
       checkWin();
     } else {
-      // Not match, reset scale
-      firstSelection.style.transform = 'scale(1)';
+      // Not a match → reset scale
+      selection.forEach(t => t.style.transform = 'scale(1)');
     }
-    firstSelection = null;
+    selection = [];
   }
 }
 
 function checkWin() {
   if (tiles.every(t => t.classList.contains('hidden'))) {
-    // All tiles cleared, show swirling image
     winImage.style.display = 'block';
   }
 }
