@@ -9,7 +9,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -19,7 +19,7 @@ body {
 }
 
 #message {
-  font-size: 20px;
+  font-size: clamp(16px, 2vw, 20px);
   margin-bottom: 20px;
   min-height: 50px;
   text-align: center;
@@ -36,20 +36,22 @@ body {
 
 #game {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
-  grid-gap: 15px;
+  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 450px; /* keeps it centered and not too wide on desktop */
 }
 
 .card {
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* square shape */
   background: white;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 60px;
+  font-size: clamp(32px, 8vw, 60px);
   line-height: 1;
   color: black;
   transition: background 0.3s, transform 0.3s;
@@ -72,7 +74,7 @@ body {
   width: 100%; height: 100%;
   background: rgba(255,255,255,0.95);
   color: black;
-  font-size: 24px;
+  font-size: clamp(18px, 2.5vw, 24px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,47 +91,52 @@ body {
   pointer-events: all;
 }
 
-/* Center container moves logo + circle upward */
+/* Center container */
 #iconLayout .center-container {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
+  position: relative;
+  margin-bottom: 20px;
   text-align: center;
   z-index: 2;
 }
 
 /* Logo */
 #iconLayout .logo img {
-  max-width: 200px;
+  max-width: min(180px, 50vw);
+  height: auto;
   position: relative;
   z-index: 2;
 }
 
-/* Emoji circle container */
+/* Emoji circle */
 .emoji-circle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: relative;
   width: 0;
   height: 0;
+  margin: 0 auto;
 }
-
 .emoji-circle div {
   position: absolute;
-  font-size: 70px;
+  font-size: clamp(36px, 8vw, 70px);
   transform: translate(-50%, -50%);
   text-shadow: 2px 2px 2px #000;
 }
 
 /* Bottom text */
 #iconLayout .text {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 20px;
   text-align: center;
   z-index: 2;
+  font-size: clamp(14px, 2vw, 18px);
+  max-width: 90%;
+  line-height: 1.4;
+}
+
+/* Extra tweaks for very small phones */
+@media (max-width: 400px) {
+  #game {
+    max-width: 320px;
+    gap: 8px;
+  }
 }
 </style>
 </head>
@@ -142,15 +149,11 @@ body {
 <div id="win">
   <div id="iconLayout">
     <div class="center-container">
-      <!-- Logo -->
       <div class="logo">
         <img src="a faliure management.png" alt="RHAC Logo">
       </div>
-      <!-- Emoji circle -->
       <div class="emoji-circle" id="emojiCircle"></div>
     </div>
-
-    <!-- Bottom text -->
     <div class="text">
       <p>Thank you for meeting with me.</p>
       <p>These icons represent RHAC’s values that inspire me to learn and grow.</p>
@@ -208,12 +211,10 @@ function selectCard(card){
       c2.classList.add("matched");
       matchedCount += 2;
 
-      // Show message
       message.textContent = descriptions[c1.dataset.symbol];
       message.classList.add("pop");
       setTimeout(()=> message.classList.remove("pop"), 400);
 
-      // Play sound
       popSound.currentTime = 0;
       popSound.play();
 
@@ -234,19 +235,17 @@ function selectCard(card){
   }
 }
 
-// Function to create emojis around the logo
 function createEmojiCircle() {
   const circle = document.getElementById("emojiCircle");
-  const radius = 120; // distance from logo center
-  const centerX = 0;
-  const centerY = 0;
+  circle.innerHTML = ""; // reset
+  const radius = 120;
   const emojiArray = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
   const count = emojiArray.length;
 
   emojiArray.forEach((emoji, i) => {
     const angle = (i / count) * 2 * Math.PI;
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
+    const x = radius * Math.cos(angle);
+    const y = radius * Math.sin(angle);
     const div = document.createElement("div");
     div.textContent = emoji;
     div.style.left = x + "px";
@@ -255,6 +254,5 @@ function createEmojiCircle() {
   });
 }
 </script>
-
 </body>
 </html>
