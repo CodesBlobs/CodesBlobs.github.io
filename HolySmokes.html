@@ -13,7 +13,7 @@ body {
   margin: 0;
   padding: 20px;
   font-family: Arial, sans-serif;
-  color: white;
+  color: black;
 
   /* Background image */
   background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center fixed;
@@ -25,6 +25,10 @@ body {
   margin-bottom: 20px;
   min-height: 50px;
   text-align: center;
+  color: black;
+  background: rgba(255,255,255,0.9);
+  padding: 10px 15px;
+  border-radius: 8px;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 .pop {
@@ -41,22 +45,22 @@ body {
 .card {
   width: 100px;
   height: 100px;
-  background: rgba(0,0,0,0.6);
+  background: white;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   font-size: 40px;
-  color: #fff;
+  color: black;
   transition: background 0.3s, transform 0.3s;
 }
 .card.selected {
-  background: #056;
+  background: #ccc;
 }
 .card.matched {
   background: #2ecc71;
-  color: #fff;
+  color: white;
   pointer-events: none;
   transform: scale(0);
   transition: transform 0.5s ease;
@@ -66,8 +70,8 @@ body {
   position: fixed;
   top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgba(0,0,0,0.85);
-  color: white;
+  background: rgba(255,255,255,0.95);
+  color: black;
   font-size: 24px;
   display: flex;
   justify-content: center;
@@ -134,78 +138,4 @@ body {
 
 <script>
 const game = document.getElementById("game");
-const win = document.getElementById("win");
-const message = document.getElementById("message");
-const popSound = document.getElementById("popSound");
-const finalSound = document.getElementById("finalSound");
-
-const logos = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
-
-const descriptions = {
-  "⭐": "Excellence in Education – Preparing students for purposeful lives.",
-  "🎉": "Values for Life – Living full, productive and purposeful lives.",
-  "∞": "Hope for Eternity – Contributing to wellbeing of families and communities.",
-  "🛣️": "Finding Purpose – Discovering purpose in following Jesus and serving others.",
-  "👨‍👩‍👧": "Christian Communities – Communities of grace, belief, and practice.",
-  "🏠": "Family & Church Partners – Working with parents and churches in community."
-};
-
-let cardsArray = [...logos, ...logos];
-cardsArray.sort(() => Math.random() - 0.5);
-
-let selected = [];
-let matchedCount = 0;
-
-// Build grid
-cardsArray.forEach(symbol => {
-  const card = document.createElement("div");
-  card.classList.add("card");
-  card.textContent = symbol;
-  card.dataset.symbol = symbol;
-  card.addEventListener("click", () => selectCard(card));
-  game.appendChild(card);
-});
-
-function selectCard(card){
-  if(card.classList.contains("matched") || card.classList.contains("selected")) return;
-
-  card.classList.add("selected");
-  selected.push(card);
-
-  if(selected.length === 2){
-    const [c1, c2] = selected;
-    if(c1.dataset.symbol === c2.dataset.symbol){
-      c1.classList.remove("selected");
-      c2.classList.remove("selected");
-      c1.classList.add("matched");
-      c2.classList.add("matched");
-      matchedCount += 2;
-
-      // Show message with pop animation
-      message.textContent = descriptions[c1.dataset.symbol];
-      message.classList.add("pop");
-      setTimeout(()=> message.classList.remove("pop"), 400);
-
-      // Play pop sound
-      popSound.currentTime = 0;
-      popSound.play();
-
-      if(matchedCount === cardsArray.length){
-        setTimeout(()=>{
-          win.classList.add("show");
-          finalSound.play();
-        },500);
-      }
-    } else {
-      setTimeout(()=>{
-        c1.classList.remove("selected");
-        c2.classList.remove("selected");
-      },600);
-    }
-    selected = [];
-  }
-}
-</script>
-
-</body>
-</html>
+const win = document.getElementById("win"
