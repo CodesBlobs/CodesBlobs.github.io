@@ -89,23 +89,28 @@ body {
   pointer-events: all;
 }
 
-/* Central logo stays in the middle (optional if you want it static) */
-#iconLayout .logo {
-  position: relative;
-  z-index: 2;
+/* Container for logo + circle, moved upward */
+#iconLayout .center-container {
+  position: absolute;
+  top: 25%; /* move upward */
+  left: 50%;
+  transform: translateX(-50%);
   text-align: center;
+  z-index: 2;
+}
+
+/* Central logo stays in the middle */
+#iconLayout .logo img {
+  max-width: 200px;
 }
 
 /* Emoji circle */
 .emoji-circle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
+  position: relative;
   width: 350px;  /* diameter of circle */
   height: 350px;
-  transform: translate(-50%, -50%);
+  margin: 0 auto;
   border-radius: 50%;
-  pointer-events: none;
 }
 
 .emoji-circle div {
@@ -115,7 +120,7 @@ body {
   text-shadow: 2px 2px 2px #000;
 }
 
-/* Move text to 30px above bottom */
+/* Bottom text 30px from bottom */
 #iconLayout .text {
   position: absolute;
   bottom: 30px;   /* 30px above bottom */
@@ -134,21 +139,23 @@ body {
 <!-- Final screen -->
 <div id="win">
   <div id="iconLayout">
-    <!-- Central logo -->
-    <div class="logo">
-      <img src="a faliure management.png" alt="RHAC Logo" style="max-width:200px;">
-    </div>
+    <div class="center-container">
+      <!-- Central logo -->
+      <div class="logo">
+        <img src="a faliure management.png" alt="RHAC Logo">
+      </div>
 
-    <!-- Emoji circle -->
-    <div class="emoji-circle">
-      <div style="top:0%; left:50%;">⭐</div>
-      <div style="top:15%; left:85%;">🎉</div>
-      <div style="top:50%; left:100%;">∞</div>
-      <div style="top:85%; left:85%;">🛣️</div>
-      <div style="top:100%; left:50%;">👨‍👩‍👧</div>
-      <div style="top:85%; left:15%;">🏠</div>
-      <div style="top:50%; left:0%;">🛣️</div>
-      <div style="top:15%; left:15%;">🎉</div>
+      <!-- Emoji circle -->
+      <div class="emoji-circle">
+        <div style="top:0%; left:50%;">⭐</div>
+        <div style="top:15%; left:85%;">🎉</div>
+        <div style="top:50%; left:100%;">∞</div>
+        <div style="top:85%; left:85%;">🛣️</div>
+        <div style="top:100%; left:50%;">👨‍👩‍👧</div>
+        <div style="top:85%; left:15%;">🏠</div>
+        <div style="top:50%; left:0%;">🛣️</div>
+        <div style="top:15%; left:15%;">🎉</div>
+      </div>
     </div>
 
     <!-- Bottom text -->
