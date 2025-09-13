@@ -1,170 +1,211 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RHAC Values Matching Game</title>
 <style>
-  body{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    height:100vh;
-    margin:0;
-    padding:20px;
-    font-family:Arial, sans-serif;
-    color:black;
-    background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center fixed;
-    background-size:cover;
-  }
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  color: black;
 
-  #message{
-    font-size:20px;
-    margin-bottom:20px;
-    min-height:50px;
-    text-align:center;
-    color:black;
-    background:rgba(255,255,255,0.9);
-    padding:10px 15px;
-    border-radius:8px;
-    transition:transform .3s ease, opacity .3s ease;
-  }
-  .pop{ transform:scale(1.3); opacity:1; }
+  /* Background image */
+  background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center fixed;
+  background-size: cover;
+}
 
-  #game{
-    display:grid;
-    grid-template-columns:repeat(4,100px);
-    grid-gap:15px;
-  }
+#message {
+  font-size: 20px;
+  margin-bottom: 20px;
+  min-height: 50px;
+  text-align: center;
+  color: black;
+  background: rgba(255,255,255,0.9);
+  padding: 10px 15px;
+  border-radius: 8px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.pop {
+  transform: scale(1.3);
+  opacity: 1;
+}
 
-  .card{
-    width:100px;
-    height:100px;
-    background:white;
-    border-radius:12px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    cursor:pointer;
-    font-size:40px;
-    color:black;
-    transition:background .3s, transform .3s;
-  }
-  .card.selected{ background:#ccc; }
-  .card.matched{
-    background:#2ecc71;
-    color:white;
-    pointer-events:none;
-    transform:scale(0);
-    transition:transform .5s ease;
-  }
+#game {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  grid-gap: 15px;
+}
 
-  #win{
-    position:fixed;
-    top:0; left:0;
-    width:100%; height:100%;
-    background:rgba(255,255,255,0.95);
-    color:black;
-    font-size:24px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    flex-direction:column;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .8s;
-    text-align:center;
-    padding:20px;
-  }
-  #win.show{ opacity:1; pointer-events:all; }
+.card {
+  width: 100px;
+  height: 100px;
+  background: white;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 40px;
+  color: black;
+  transition: background 0.3s, transform 0.3s;
+}
+.card.selected {
+  background: #ccc;
+}
+.card.matched {
+  background: #2ecc71;
+  color: white;
+  pointer-events: none;
+  transform: scale(0);
+  transition: transform 0.5s ease;
+}
 
-  /* container holding logo + emoji circle (moves upward together) */
-  #circleContainer{
-    position:relative;
-    width:320px;
-    height:320px;
-    margin-bottom:40px; /* pushes circle+logo upward from center */
-  }
+#win {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(255,255,255,0.95);
+  color: black;
+  font-size: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.8s;
+  text-align: center;
+  padding: 20px;
+}
+#win.show {
+  opacity: 1;
+  pointer-events: all;
+}
 
-  /* central logo */
-  #circleContainer img{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    max-width:140px;
-    z-index:2;
-  }
+#iconLayout {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 
-  /* emojis positioned with transforms so they form a true circle around the logo */
-  .emoji{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform-origin:center center;
-    font-size:64px;
-    transform: translate(-50%,-50%) rotate(0deg) translate(140px) rotate(0deg);
-    text-shadow:2px 2px 2px rgba(0,0,0,0.35);
-    pointer-events:none;
-  }
+/* Circle of emojis */
+#iconLayout .emoji-circle {
+  position: absolute;
+  top: 40%; /* shift upwards */
+  left: 50%;
+  width: 300px;
+  height: 300px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
 
-  /* We'll override rotate() for each emoji inline so they sit evenly spaced */
-  #bottomText{
-    position:absolute;
-    bottom:30px; /* 30px above bottom as requested */
-    width:100%;
-    text-align:center;
-    font-size:20px;
-    line-height:1.5;
-    color:black;
-    padding:0 20px;
-  }
+#iconLayout .emoji-circle div {
+  position: absolute;
+  font-size: 60px;
+  transform: translate(-50%, -50%);
+  text-shadow: 2px 2px 2px #000;
+}
 
-  /* small responsive tweak */
-  @media (max-width:420px){
-    .emoji{ font-size:48px; transform: translate(-50%,-50%) rotate(0deg) translate(110px) rotate(0deg); }
-    #circleContainer{ width:260px; height:260px; margin-bottom:20px; }
-    #circleContainer img{ max-width:110px; }
-  }
+/* Center logo */
+#iconLayout .logo {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  text-align: center;
+}
+#iconLayout .logo img {
+  max-width: 150px;
+}
+
+/* Text near bottom */
+#iconLayout .text {
+  position: absolute;
+  bottom: 30px;
+  left: calc(50% - 50px); /* shifted 50px left */
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 2;
+}
 </style>
 </head>
 <body>
 
-  <div id="message">Match the logos to reveal their meaning!</div>
-  <div id="game"></div>
+<div id="message">Match the logos to reveal their meaning!</div>
+<div id="game"></div>
 
-  <!-- Final screen -->
-  <div id="win">
-    <div id="circleContainer" aria-hidden="true">
-      <img src="a faliure management.png" alt="RHAC Logo">
-      <!-- emojis arranged evenly using rotate + translate so they form a circle around the logo -->
-      <div class="emoji" style="transform: translate(-50%,-50%) rotate(0deg)   translate(140px) rotate(0deg);">⭐</div>
-      <div class="emoji" style="transform: translate(-50%,-50%) rotate(60deg)  translate(140px) rotate(-60deg);">🎉</div>
-      <div class="emoji" style="transform: translate(-50%,-50%) rotate(120deg) translate(140px) rotate(-120deg);">∞</div>
-      <div class="emoji" style="transform: translate(-50%,-50%) rotate(180deg) translate(140px) rotate(-180deg);">🛣️</div>
-      <div class="emoji" style="transform: translate(-50%,-50%) rotate(240deg) translate(140px) rotate(-240deg);">👨‍👩‍👧</div>
-      <div class="emoji" style="transform: translate(-50%,-50%) rotate(300deg) translate(140px) rotate(-300deg);">🏠</div>
+<!-- Final screen -->
+<div id="win">
+  <div id="iconLayout">
+    <!-- Emoji circle -->
+    <div class="emoji-circle">
+      <div style="top:0%; left:50%;">⭐</div>
+      <div style="top:25%; left:90%;">🎉</div>
+      <div style="top:75%; left:90%;">∞</div>
+      <div style="top:100%; left:50%;">🛣️</div>
+      <div style="top:75%; left:10%;">👨‍👩‍👧</div>
+      <div style="top:25%; left:10%;">🏠</div>
     </div>
 
-    <div id="bottomText">
+    <!-- Center logo -->
+    <div class="logo">
+      <img src="a faliure management.png" alt="RHAC Logo">
+    </div>
+
+    <!-- Bottom text -->
+    <div class="text">
       <p>Thank you for meeting with me.</p>
       <p>These icons represent RHAC’s values that inspire me to learn and grow.</p>
     </div>
   </div>
+</div>
 
-  <!-- audio: preload, playsinline for mobile; we'll also prime on first touch/click -->
-  <audio id="popSound" src="sound1.mp3" preload="auto" playsinline webkit-playsinline></audio>
-  <audio id="finalSound" src="sound2.mp3" preload="auto" playsinline webkit-playsinline></audio>
+<audio id="popSound"></audio>
+<audio id="finalSound"></audio>
 
 <script>
-/* ------------ Game setup ------------ */
-const game = document.getElementById('game');
-const win = document.getElementById('win');
-const message = document.getElementById('message');
-const popSound = document.getElementById('popSound');
-const finalSound = document.getElementById('finalSound');
+const game = document.getElementById("game");
+const win = document.getElementById("win");
+const message = document.getElementById("message");
+
+const popSound = document.getElementById("popSound");
+const finalSound = document.getElementById("finalSound");
+
+const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+// Set sources depending on platform
+if (isIOS) {
+  popSound.src = "sound1.m4a";
+  finalSound.src = "sound2.m4a";
+} else {
+  popSound.src = "sound1.mp3";
+  finalSound.src = "sound2.mp3";
+}
+
+// Unlock audio once (iOS Safari requirement)
+function unlockAudioOnce() {
+  document.removeEventListener('touchstart', unlockAudioOnce);
+  document.removeEventListener('click', unlockAudioOnce);
+
+  [popSound, finalSound].forEach(sound => {
+    sound.play().then(() => {
+      sound.pause();
+      sound.currentTime = 0;
+    }).catch(e => console.log("unlock failed", e));
+  });
+}
+document.addEventListener('touchstart', unlockAudioOnce, {once:true, passive:true});
+document.addEventListener('click', unlockAudioOnce, {once:true});
 
 const logos = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
+
 const descriptions = {
   "⭐": "Excellence in Education – Preparing students for purposeful lives.",
   "🎉": "Values for Life – Living full, productive and purposeful lives.",
@@ -175,123 +216,62 @@ const descriptions = {
 };
 
 let cardsArray = [...logos, ...logos];
-cardsArray.sort(()=>Math.random() - 0.5);
+cardsArray.sort(() => Math.random() - 0.5);
 
 let selected = [];
 let matchedCount = 0;
 
-cardsArray.forEach(sym=>{
-  const d = document.createElement('div');
-  d.className = 'card';
-  d.textContent = sym;
-  d.dataset.symbol = sym;
-  d.addEventListener('click', ()=> selectCard(d));
-  game.appendChild(d);
+// Build grid
+cardsArray.forEach(symbol => {
+  const card = document.createElement("div");
+  card.classList.add("card");
+  card.textContent = symbol;
+  card.dataset.symbol = symbol;
+  card.addEventListener("click", () => selectCard(card));
+  game.appendChild(card);
 });
 
-/* ------------ Mobile audio unlock ------------
-   Strategy:
-   - On first user gesture (touchstart OR click) try to play & pause the pop sound to "prime" audio.
-   - Fallback: resume/create an AudioContext (some browsers require this).
-   This ensures subsequent popSound.play() calls inside card click handlers are allowed.
-*/
-function unlockAudioOnce(){
-  document.removeEventListener('touchstart', unlockAudioOnce);
-  document.removeEventListener('click', unlockAudioOnce);
-
-  // Ensure audio elements are loaded
-  try { popSound.load(); finalSound.load(); } catch(e){}
-
-  // Try to play & immediately pause the pop sound to prime audio system
-  popSound.currentTime = 0;
-  const p = popSound.play();
-  if (p && typeof p.then === 'function') {
-    p.then(()=> {
-      try { popSound.pause(); popSound.currentTime = 0; } catch(e){}
-    }).catch(()=> {
-      // If play rejected, try AudioContext resume + a tiny silent buffer as a fallback
-      try {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (Ctx) {
-          const ctx = new Ctx();
-          if (ctx.state === 'suspended') {
-            ctx.resume().catch(()=>{});
-          }
-          // tiny silent buffer to unlock
-          const buffer = ctx.createBuffer(1,1,22050);
-          const src = ctx.createBufferSource();
-          src.buffer = buffer;
-          src.connect(ctx.destination);
-          try { src.start(0); } catch(e){}
-        }
-      } catch(err){}
-    });
-  } else {
-    // older browsers: try AudioContext fallback
-    try {
-      const Ctx = window.AudioContext || window.webkitAudioContext;
-      if (Ctx) {
-        const ctx = new Ctx();
-        if (ctx.state === 'suspended') ctx.resume().catch(()=>{});
-        const buffer = ctx.createBuffer(1,1,22050);
-        const src = ctx.createBufferSource();
-        src.buffer = buffer;
-        src.connect(ctx.destination);
-        try { src.start(0); } catch(e){}
-      }
-    } catch(err){}
-  }
-}
-document.addEventListener('touchstart', unlockAudioOnce, {passive:true, once:true});
-document.addEventListener('click', unlockAudioOnce, {once:true});
-
-/* ------------ Card selection logic (pop sound played directly in gesture path) ------------ */
 function selectCard(card){
-  if (card.classList.contains('matched') || card.classList.contains('selected')) return;
+  if(card.classList.contains("matched") || card.classList.contains("selected")) return;
 
-  card.classList.add('selected');
+  card.classList.add("selected");
   selected.push(card);
 
-  if (selected.length === 2){
-    const [c1,c2] = selected;
+  if(selected.length === 2){
+    const [c1, c2] = selected;
 
-    // Play pop sound inside the click handler (mobile-safe after unlocking)
-    try {
-      popSound.currentTime = 0;
-      popSound.play().catch(e => {
-        // If still blocked, log but continue gracefully
-        console.log('popSound play blocked:', e);
-      });
-    } catch(err){
-      console.log('popSound play error:', err);
-    }
+    // Play pop sound immediately on tap
+    popSound.currentTime = 0;
+    popSound.play().catch(e => console.log("Sound blocked:", e));
 
-    if (c1.dataset.symbol === c2.dataset.symbol){
-      c1.classList.remove('selected');
-      c2.classList.remove('selected');
-      c1.classList.add('matched');
-      c2.classList.add('matched');
+    if(c1.dataset.symbol === c2.dataset.symbol){
+      c1.classList.remove("selected");
+      c2.classList.remove("selected");
+      c1.classList.add("matched");
+      c2.classList.add("matched");
       matchedCount += 2;
 
+      // Show message with pop animation
       message.textContent = descriptions[c1.dataset.symbol];
-      message.classList.add('pop');
-      setTimeout(()=> message.classList.remove('pop'), 400);
+      message.classList.add("pop");
+      setTimeout(()=> message.classList.remove("pop"), 400);
 
-      if (matchedCount === cardsArray.length){
+      if(matchedCount === cardsArray.length){
         setTimeout(()=>{
-          win.classList.add('show');
-          try { finalSound.currentTime = 0; finalSound.play().catch(()=>{}); } catch(e){}
-        }, 500);
+          win.classList.add("show");
+          finalSound.play();
+        },500);
       }
     } else {
       setTimeout(()=>{
-        c1.classList.remove('selected');
-        c2.classList.remove('selected');
-      }, 600);
+        c1.classList.remove("selected");
+        c2.classList.remove("selected");
+      },600);
     }
     selected = [];
   }
 }
 </script>
+
 </body>
 </html>
