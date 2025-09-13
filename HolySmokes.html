@@ -133,9 +133,83 @@ body {
   </div>
 </div>
 
-<audio id="popSound" src="sound1.mp4"></audio>
-<audio id="finalSound" src="sound2.mp4"></audio>
+<audio id="popSound" src="sound1.mp3"></audio>
+<audio id="finalSound" src="sound2.mp3"></audio>
 
 <script>
 const game = document.getElementById("game");
-const win = document.getElementById("win"
+const win = document.getElementById("win");
+const message = document.getElementById("message");
+const popSound = document.getElementById("popSound");
+const finalSound = document.getElementById("finalSound");
+
+const logos = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
+
+const descriptions = {
+  "⭐": "Excellence in Education – Preparing students for purposeful lives.",
+  "🎉": "Values for Life – Living full, productive and purposeful lives.",
+  "∞": "Hope for Eternity – Contributing to wellbeing of families and communities.",
+  "🛣️": "Finding Purpose – Discovering purpose in following Jesus and serving others.",
+  "👨‍👩‍👧": "Christian Communities – Communities of grace, belief, and practice.",
+  "🏠": "Family & Church Partners – Working with parents and churches in community."
+};
+
+let cardsArray = [...logos, ...logos];
+cardsArray.sort(() => Math.random() - 0.5);
+
+let selected = [];
+let matchedCount = 0;
+
+// Build grid
+cardsArray.forEach(symbol => {
+  const card = document.createElement("div");
+  card.classList.add("card");
+  card.textContent = symbol;
+  card.dataset.symbol = symbol;
+  card.addEventListener("click", () => selectCard(card));
+  game.appendChild(card);
+});
+
+function selectCard(card){
+  if(card.classList.contains("matched") || card.classList.contains("selected")) return;
+
+  card.classList.add("selected");
+  selected.push(card);
+
+  if(selected.length === 2){
+    const [c1, c2] = selected;
+    if(c1.dataset.symbol === c2.dataset.symbol){
+      c1.classList.remove("selected");
+      c2.classList.remove("selected");
+      c1.classList.add("matched");
+      c2.classList.add("matched");
+      matchedCount += 2;
+
+      // Show message with pop animation
+      message.textContent = descriptions[c1.dataset.symbol];
+      message.classList.add("pop");
+      setTimeout(()=> message.classList.remove("pop"), 400);
+
+      // Play pop sound
+      popSound.currentTime = 0;
+      popSound.play();
+
+      if(matchedCount === cardsArray.length){
+        setTimeout(()=>{
+          win.classList.add("show");
+          finalSound.play();
+        },500);
+      }
+    } else {
+      setTimeout(()=>{
+        c1.classList.remove("selected");
+        c2.classList.remove("selected");
+      },600);
+    }
+    selected = [];
+  }
+}
+</script>
+
+</body>
+</html>
