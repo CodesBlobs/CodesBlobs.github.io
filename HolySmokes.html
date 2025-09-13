@@ -29,10 +29,7 @@ body {
   border-radius: 8px;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
-.pop {
-  transform: scale(1.3);
-  opacity: 1;
-}
+.pop { transform: scale(1.3); opacity: 1; }
 
 #game {
   display: grid;
@@ -44,7 +41,7 @@ body {
 
 .card {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 1/1;
   background: white;
   border-radius: 12px;
   display: flex;
@@ -52,14 +49,11 @@ body {
   align-items: center;
   cursor: pointer;
   font-size: clamp(32px, 6vw, 60px);
-  line-height: 1;
   color: black;
-  transition: background 0.3s, transform 0.3s;
   text-shadow: 1px 1px 1px #000;
+  transition: background 0.3s, transform 0.3s;
 }
-.card.selected {
-  background: #ccc;
-}
+.card.selected { background: #ccc; }
 .card.matched {
   background: #2ecc71;
   color: white;
@@ -70,77 +64,45 @@ body {
 
 #win {
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top:0; left:0;
+  width:100%; height:100%;
   background: rgba(255,255,255,0.95);
-  color: black;
-  font-size: clamp(18px, 2.5vw, 24px);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  opacity:0;
+  pointer-events:none;
   transition: opacity 0.8s;
-  text-align: center;
-  padding: 20px;
+  text-align:center;
+  padding:20px;
+  font-size: clamp(18px,2.5vw,24px);
 }
+#win.show { opacity:1; pointer-events: all; }
 
-#win.show {
-  opacity: 1;
-  pointer-events: all;
-}
+#iconLayout .center-container { position: relative; margin-bottom:20px; text-align:center; }
+#iconLayout .logo img { max-width: 250px; height:auto; position: relative; z-index:2; }
 
-/* Center container */
-#iconLayout .center-container {
-  position: relative;
-  text-align: center;
-  margin-bottom: 20px;
-}
-
-/* Logo */
-#iconLayout .logo img {
-  max-width: 250px;
-  height: auto;
-  position: relative;
-  z-index: 2;
-}
-
-/* Emoji circle container */
-.emoji-circle {
-  position: relative;
-  width: 100%;
-  height: 0;
-  margin-top: 20px;
-}
+.emoji-circle { position: relative; width: 100%; height: 0; margin-top:20px; }
 .emoji-circle div {
   position: absolute;
-  font-size: clamp(30px, 5vw, 70px);
-  transform: translate(-50%, -50%);
+  font-size: clamp(30px,5vw,70px);
+  transform: translate(-50%,-50%);
   text-shadow: 2px 2px 2px #000;
 }
 
-/* Bottom text */
 #iconLayout .text {
-  margin-top: 20px;
-  text-align: center;
-  font-size: clamp(12px, 4vw, 18px);
-  max-width: 90%;
-  line-height: 1.4;
+  margin-top:20px;
+  text-align:center;
+  font-size: clamp(12px,4vw,18px);
+  max-width:90%;
+  line-height:1.4;
 }
 
-/* Mobile tweaks */
-@media (max-width: 400px){
-  #game {
-    max-width: 320px;
-    gap: 8px;
-  }
-  #iconLayout .text {
-    margin-top: 10px;
-  }
-  .emoji-circle div {
-    font-size: clamp(24px, 5vw, 50px);
-  }
+@media(max-width:400px){
+  #game { max-width:320px; gap:8px; }
+  .emoji-circle div { font-size: clamp(24px,5vw,50px); }
+  #iconLayout .text { margin-top:10px; }
 }
 </style>
 </head>
@@ -149,7 +111,6 @@ body {
 <div id="message">Match the logos to reveal their meaning!</div>
 <div id="game"></div>
 
-<!-- Final screen -->
 <div id="win">
   <div id="iconLayout">
     <div class="center-container">
@@ -169,103 +130,87 @@ body {
 <audio id="finalSound" src="sound2.mp3"></audio>
 
 <script>
-// Matching game
+// Game logic
 const game = document.getElementById("game");
 const win = document.getElementById("win");
 const message = document.getElementById("message");
 const popSound = document.getElementById("popSound");
 const finalSound = document.getElementById("finalSound");
 
-const logos = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
+const logos = ["⭐","🎉","∞","🛣️","👨‍👩‍👧","🏠"];
 const descriptions = {
-  "⭐": "Excellence in Education – Preparing students for purposeful lives.",
-  "🎉": "Values for Life – Living full, productive and purposeful lives.",
-  "∞": "Hope for Eternity – Contributing to wellbeing of families and communities.",
-  "🛣️": "Finding Purpose – Discovering purpose in following Jesus and serving others.",
-  "👨‍👩‍👧": "Christian Communities – Communities of grace, belief, and practice.",
-  "🏠": "Family & Church Partners – Working with parents and churches in community."
+  "⭐":"Excellence in Education – Preparing students for purposeful lives.",
+  "🎉":"Values for Life – Living full, productive and purposeful lives.",
+  "∞":"Hope for Eternity – Contributing to wellbeing of families and communities.",
+  "🛣️":"Finding Purpose – Discovering purpose in following Jesus and serving others.",
+  "👨‍👩‍👧":"Christian Communities – Communities of grace, belief, and practice.",
+  "🏠":"Family & Church Partners – Working with parents and churches in community."
 };
 
-let cardsArray = [...logos, ...logos];
-cardsArray.sort(() => Math.random() - 0.5);
-let selected = [];
-let matchedCount = 0;
+let cardsArray = [...logos,...logos].sort(()=>Math.random()-0.5);
+let selected=[]; let matchedCount=0;
 
-cardsArray.forEach(symbol => {
-  const card = document.createElement("div");
+cardsArray.forEach(symbol=>{
+  const card=document.createElement("div");
   card.classList.add("card");
-  card.textContent = symbol;
-  card.dataset.symbol = symbol;
-  card.addEventListener("click", () => selectCard(card));
+  card.textContent=symbol;
+  card.dataset.symbol=symbol;
+  card.addEventListener("click",()=>selectCard(card));
   game.appendChild(card);
 });
 
 function selectCard(card){
-  if(card.classList.contains("matched") || card.classList.contains("selected")) return;
-
-  card.classList.add("selected");
-  selected.push(card);
-
-  if(selected.length === 2){
-    const [c1, c2] = selected;
-    if(c1.dataset.symbol === c2.dataset.symbol){
-      c1.classList.remove("selected");
-      c2.classList.remove("selected");
-      c1.classList.add("matched");
-      c2.classList.add("matched");
-      matchedCount += 2;
-
+  if(card.classList.contains("matched")||card.classList.contains("selected")) return;
+  card.classList.add("selected"); selected.push(card);
+  if(selected.length===2){
+    const [c1,c2]=selected;
+    if(c1.dataset.symbol===c2.dataset.symbol){
+      c1.classList.remove("selected"); c2.classList.remove("selected");
+      c1.classList.add("matched"); c2.classList.add("matched");
+      matchedCount+=2;
       message.textContent = descriptions[c1.dataset.symbol];
       message.classList.add("pop");
-      setTimeout(()=> message.classList.remove("pop"), 400);
-
-      popSound.currentTime = 0;
-      popSound.play();
-
-      if(matchedCount === cardsArray.length){
-        setTimeout(()=>{
-          win.classList.add("show");
-          finalSound.play();
-          createEmojiCircle();
-        },500);
+      setTimeout(()=>message.classList.remove("pop"),400);
+      popSound.currentTime=0; popSound.play();
+      if(matchedCount===cardsArray.length){
+        setTimeout(()=>{win.classList.add("show"); finalSound.play(); createEmojiCircle();},500);
       }
     } else {
-      setTimeout(()=>{
-        c1.classList.remove("selected");
-        c2.classList.remove("selected");
-      },600);
+      setTimeout(()=>{c1.classList.remove("selected"); c2.classList.remove("selected");},600);
     }
-    selected = [];
+    selected=[];
   }
 }
 
 // Proper circular emoji layout
-function createEmojiCircle() {
-  const circle = document.getElementById("emojiCircle");
-  circle.innerHTML = "";
-  const emojiArray = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
+function createEmojiCircle(){
+  const circle=document.getElementById("emojiCircle");
+  circle.innerHTML="";
+  const emojiArray = ["⭐","🎉","∞","🛣️","👨‍👩‍👧","🏠"];
   const count = emojiArray.length;
+  const logo = document.querySelector("#iconLayout .logo");
+  const logoRect = logo.getBoundingClientRect();
+  const centerX = logoRect.width/2;
+  const centerY = logoRect.height/2;
+  const radius = Math.min(120, logoRect.width*1.2);
 
-  const logoContainer = document.querySelector("#iconLayout .logo");
-  const logoWidth = logoContainer.offsetWidth;
-  const logoHeight = logoContainer.offsetHeight;
-
-  const centerX = logoWidth / 2;
-  const centerY = logoHeight / 2;
-
-  // radius scales with logo size
-  const radius = Math.min(120, Math.max(logoWidth, logoHeight) * 0.9);
-
-  emojiArray.forEach((emoji, i) => {
-    const angle = (i / count) * 2 * Math.PI;
+  emojiArray.forEach((emoji,i)=>{
+    const angle = (i/count)*2*Math.PI;
+    const x = centerX + radius*Math.cos(angle);
+    const y = centerY + radius*Math.sin(angle);
     const div = document.createElement("div");
     div.textContent = emoji;
-    // Use percentages for positioning relative to container
-    div.style.left = `calc(${50 + (radius * Math.cos(angle) / logoWidth * 50)}%)`;
-    div.style.top = `calc(${50 + (radius * Math.sin(angle) / logoHeight * 50)}%)`;
+    div.style.left = x + "px";
+    div.style.top = y + "px";
     circle.appendChild(div);
   });
 }
+
+// Recalculate on resize
+window.addEventListener("resize", ()=>{
+  if(win.classList.contains("show")) createEmojiCircle();
+});
 </script>
+
 </body>
 </html>
