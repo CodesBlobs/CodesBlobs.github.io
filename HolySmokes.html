@@ -14,8 +14,6 @@ body {
   padding: 20px;
   font-family: Arial, sans-serif;
   color: black;
-
-  /* Background image */
   background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center fixed;
   background-size: cover;
 }
@@ -51,9 +49,11 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 40px;
+  font-size: 60px;
+  line-height: 1;
   color: black;
   transition: background 0.3s, transform 0.3s;
+  text-shadow: 1px 1px 1px #000;
 }
 .card.selected {
   background: #ccc;
@@ -83,53 +83,50 @@ body {
   text-align: center;
   padding: 20px;
 }
+
 #win.show {
   opacity: 1;
   pointer-events: all;
 }
 
-#iconLayout {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
-
-/* Circle of emojis */
-#iconLayout .emoji-circle {
+/* Center container moves logo + circle upward */
+#iconLayout .center-container {
   position: absolute;
-  top: 40%; /* shift upwards */
+  top: 20%;
   left: 50%;
-  width: 300px;
-  height: 300px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 2;
 }
 
-#iconLayout .emoji-circle div {
+/* Logo */
+#iconLayout .logo img {
+  max-width: 200px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Emoji circle container */
+.emoji-circle {
   position: absolute;
-  font-size: 60px;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+}
+
+.emoji-circle div {
+  position: absolute;
+  font-size: 70px;
   transform: translate(-50%, -50%);
   text-shadow: 2px 2px 2px #000;
 }
 
-/* Center logo */
-#iconLayout .logo {
-  position: absolute;
-  top: 40%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
-  text-align: center;
-}
-#iconLayout .logo img {
-  max-width: 150px;
-}
-
-/* Text near bottom */
+/* Bottom text */
 #iconLayout .text {
   position: absolute;
   bottom: 30px;
-  left: calc(50% - 50px); /* shifted 50px left */
+  left: 50%;
   transform: translateX(-50%);
   text-align: center;
   z-index: 2;
@@ -144,19 +141,13 @@ body {
 <!-- Final screen -->
 <div id="win">
   <div id="iconLayout">
-    <!-- Emoji circle -->
-    <div class="emoji-circle">
-      <div style="top:0%; left:50%;">⭐</div>
-      <div style="top:25%; left:90%;">🎉</div>
-      <div style="top:75%; left:90%;">∞</div>
-      <div style="top:100%; left:50%;">🛣️</div>
-      <div style="top:75%; left:10%;">👨‍👩‍👧</div>
-      <div style="top:25%; left:10%;">🏠</div>
-    </div>
-
-    <!-- Center logo -->
-    <div class="logo">
-      <img src="a faliure management.png" alt="RHAC Logo">
+    <div class="center-container">
+      <!-- Logo -->
+      <div class="logo">
+        <img src="a faliure management.png" alt="RHAC Logo">
+      </div>
+      <!-- Emoji circle -->
+      <div class="emoji-circle" id="emojiCircle"></div>
     </div>
 
     <!-- Bottom text -->
@@ -167,45 +158,18 @@ body {
   </div>
 </div>
 
-<audio id="popSound"></audio>
-<audio id="finalSound"></audio>
+<audio id="popSound" src="sound1.mp3"></audio>
+<audio id="finalSound" src="sound2.mp3"></audio>
 
 <script>
+// Matching game
 const game = document.getElementById("game");
 const win = document.getElementById("win");
 const message = document.getElementById("message");
-
 const popSound = document.getElementById("popSound");
 const finalSound = document.getElementById("finalSound");
 
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-// Set sources depending on platform
-if (isIOS) {
-  popSound.src = "sound1.m4a";
-  finalSound.src = "sound2.m4a";
-} else {
-  popSound.src = "sound1.mp3";
-  finalSound.src = "sound1.mp3";
-}
-
-// Unlock audio once (iOS Safari requirement)
-function unlockAudioOnce() {
-  document.removeEventListener('touchstart', unlockAudioOnce);
-  document.removeEventListener('click', unlockAudioOnce);
-
-  [popSound, finalSound].forEach(sound => {
-    sound.play().then(() => {
-      sound.pause();
-      sound.currentTime = 0;
-    }).catch(e => console.log("unlock failed", e));
-  });
-}
-document.addEventListener('touchstart', unlockAudioOnce, {once:true, passive:true});
-document.addEventListener('click', unlockAudioOnce, {once:true});
-
 const logos = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
-
 const descriptions = {
   "⭐": "Excellence in Education – Preparing students for purposeful lives.",
   "🎉": "Values for Life – Living full, productive and purposeful lives.",
@@ -217,11 +181,9 @@ const descriptions = {
 
 let cardsArray = [...logos, ...logos];
 cardsArray.sort(() => Math.random() - 0.5);
-
 let selected = [];
 let matchedCount = 0;
 
-// Build grid
 cardsArray.forEach(symbol => {
   const card = document.createElement("div");
   card.classList.add("card");
@@ -239,11 +201,6 @@ function selectCard(card){
 
   if(selected.length === 2){
     const [c1, c2] = selected;
-
-    // Play pop sound immediately on tap
-    popSound.currentTime = 0;
-    popSound.play().catch(e => console.log("Sound blocked:", e));
-
     if(c1.dataset.symbol === c2.dataset.symbol){
       c1.classList.remove("selected");
       c2.classList.remove("selected");
@@ -251,15 +208,20 @@ function selectCard(card){
       c2.classList.add("matched");
       matchedCount += 2;
 
-      // Show message with pop animation
+      // Show message
       message.textContent = descriptions[c1.dataset.symbol];
       message.classList.add("pop");
       setTimeout(()=> message.classList.remove("pop"), 400);
+
+      // Play sound
+      popSound.currentTime = 0;
+      popSound.play();
 
       if(matchedCount === cardsArray.length){
         setTimeout(()=>{
           win.classList.add("show");
           finalSound.play();
+          createEmojiCircle();
         },500);
       }
     } else {
@@ -270,6 +232,27 @@ function selectCard(card){
     }
     selected = [];
   }
+}
+
+// Function to create emojis around the logo
+function createEmojiCircle() {
+  const circle = document.getElementById("emojiCircle");
+  const radius = 120; // distance from logo center
+  const centerX = 0;
+  const centerY = 0;
+  const emojiArray = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
+  const count = emojiArray.length;
+
+  emojiArray.forEach((emoji, i) => {
+    const angle = (i / count) * 2 * Math.PI;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    const div = document.createElement("div");
+    div.textContent = emoji;
+    div.style.left = x + "px";
+    div.style.top = y + "px";
+    circle.appendChild(div);
+  });
 }
 </script>
 
