@@ -89,8 +89,8 @@ body {
   pointer-events: all;
 }
 
-/* Central logo container */
-#iconLayout .text {
+/* Central logo stays in the middle (optional if you want it static) */
+#iconLayout .logo {
   position: relative;
   z-index: 2;
   text-align: center;
@@ -114,6 +114,16 @@ body {
   transform: translate(-50%, -50%);
   text-shadow: 2px 2px 2px #000;
 }
+
+/* Move text to 30px above bottom */
+#iconLayout .text {
+  position: absolute;
+  bottom: 30px;   /* 30px above bottom */
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 2;
+}
 </style>
 </head>
 <body>
@@ -124,10 +134,9 @@ body {
 <!-- Final screen -->
 <div id="win">
   <div id="iconLayout">
-    <div class="text">
+    <!-- Central logo -->
+    <div class="logo">
       <img src="a faliure management.png" alt="RHAC Logo" style="max-width:200px;">
-      <p>Thank you for meeting with me.</p>
-      <p>These icons represent RHAC’s values that inspire me to learn and grow.</p>
     </div>
 
     <!-- Emoji circle -->
@@ -140,6 +149,12 @@ body {
       <div style="top:85%; left:15%;">🏠</div>
       <div style="top:50%; left:0%;">🛣️</div>
       <div style="top:15%; left:15%;">🎉</div>
+    </div>
+
+    <!-- Bottom text -->
+    <div class="text">
+      <p>Thank you for meeting with me.</p>
+      <p>These icons represent RHAC’s values that inspire me to learn and grow.</p>
     </div>
   </div>
 </div>
