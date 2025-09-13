@@ -49,7 +49,7 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 60px; /* bigger emojis */
+  font-size: 60px;
   line-height: 1;
   color: black;
   transition: background 0.3s, transform 0.3s;
@@ -89,41 +89,43 @@ body {
   pointer-events: all;
 }
 
-/* Container for logo + emoji circle moved upward */
+/* Center container moves logo + circle upward */
 #iconLayout .center-container {
   position: absolute;
-  top: 20%; /* move the logo and emoji circle upward */
+  top: 20%;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   z-index: 2;
 }
 
-/* Central logo */
+/* Logo */
 #iconLayout .logo img {
   max-width: 200px;
+  position: relative;
+  z-index: 2;
 }
 
-/* Emoji circle inside the same container */
+/* Emoji circle container */
 .emoji-circle {
-  position: relative;
-  width: 350px;  /* diameter of circle */
-  height: 350px;
-  margin: 0 auto;
-  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
 }
 
 .emoji-circle div {
   position: absolute;
-  font-size: 70px; /* bigger emojis */
+  font-size: 70px;
   transform: translate(-50%, -50%);
   text-shadow: 2px 2px 2px #000;
 }
 
-/* Bottom text 30px from bottom */
+/* Bottom text */
 #iconLayout .text {
   position: absolute;
-  bottom: 30px;   /* 30px above bottom */
+  bottom: 30px;
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
@@ -140,22 +142,12 @@ body {
 <div id="win">
   <div id="iconLayout">
     <div class="center-container">
-      <!-- Central logo -->
+      <!-- Logo -->
       <div class="logo">
         <img src="a faliure management.png" alt="RHAC Logo">
       </div>
-
-      <!-- Emoji circle (moves with logo) -->
-      <div class="emoji-circle">
-        <div style="top:0%; left:50%;">⭐</div>
-        <div style="top:15%; left:85%;">🎉</div>
-        <div style="top:50%; left:100%;">∞</div>
-        <div style="top:85%; left:85%;">🛣️</div>
-        <div style="top:100%; left:50%;">👨‍👩‍👧</div>
-        <div style="top:85%; left:15%;">🏠</div>
-        <div style="top:50%; left:0%;">🛣️</div>
-        <div style="top:15%; left:15%;">🎉</div>
-      </div>
+      <!-- Emoji circle -->
+      <div class="emoji-circle" id="emojiCircle"></div>
     </div>
 
     <!-- Bottom text -->
@@ -170,6 +162,7 @@ body {
 <audio id="finalSound" src="sound2.mp3"></audio>
 
 <script>
+// Matching game
 const game = document.getElementById("game");
 const win = document.getElementById("win");
 const message = document.getElementById("message");
@@ -177,7 +170,6 @@ const popSound = document.getElementById("popSound");
 const finalSound = document.getElementById("finalSound");
 
 const logos = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
-
 const descriptions = {
   "⭐": "Excellence in Education – Preparing students for purposeful lives.",
   "🎉": "Values for Life – Living full, productive and purposeful lives.",
@@ -189,11 +181,9 @@ const descriptions = {
 
 let cardsArray = [...logos, ...logos];
 cardsArray.sort(() => Math.random() - 0.5);
-
 let selected = [];
 let matchedCount = 0;
 
-// Build grid
 cardsArray.forEach(symbol => {
   const card = document.createElement("div");
   card.classList.add("card");
@@ -218,12 +208,12 @@ function selectCard(card){
       c2.classList.add("matched");
       matchedCount += 2;
 
-      // Show message with pop animation
+      // Show message
       message.textContent = descriptions[c1.dataset.symbol];
       message.classList.add("pop");
       setTimeout(()=> message.classList.remove("pop"), 400);
 
-      // Play pop sound
+      // Play sound
       popSound.currentTime = 0;
       popSound.play();
 
@@ -231,6 +221,7 @@ function selectCard(card){
         setTimeout(()=>{
           win.classList.add("show");
           finalSound.play();
+          createEmojiCircle();
         },500);
       }
     } else {
@@ -241,6 +232,27 @@ function selectCard(card){
     }
     selected = [];
   }
+}
+
+// Function to create emojis around the logo
+function createEmojiCircle() {
+  const circle = document.getElementById("emojiCircle");
+  const radius = 120; // distance from logo center
+  const centerX = 0;
+  const centerY = 0;
+  const emojiArray = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
+  const count = emojiArray.length;
+
+  emojiArray.forEach((emoji, i) => {
+    const angle = (i / count) * 2 * Math.PI;
+    const x = centerX + radius * Math.cos(angle);
+    const y = centerY + radius * Math.sin(angle);
+    const div = document.createElement("div");
+    div.textContent = emoji;
+    div.style.left = x + "px";
+    div.style.top = y + "px";
+    circle.appendChild(div);
+  });
 }
 </script>
 
