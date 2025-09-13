@@ -49,11 +49,9 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 60px;
-  line-height: 1;
+  font-size: 40px;
   color: black;
   transition: background 0.3s, transform 0.3s;
-  text-shadow: 1px 1px 1px #000;
 }
 .card.selected {
   background: #ccc;
@@ -83,53 +81,42 @@ body {
   text-align: center;
   padding: 20px;
 }
-
 #win.show {
   opacity: 1;
   pointer-events: all;
 }
 
-/* Center container moves logo + circle upward */
-#iconLayout .center-container {
-  position: absolute;
-  top: 20%;
-  left: 50%;
-  transform: translateX(-50%);
-  text-align: center;
-  z-index: 2;
-}
-
-/* Logo */
-#iconLayout .logo img {
-  max-width: 200px;
+#circleContainer {
   position: relative;
-  z-index: 2;
+  width: 300px;
+  height: 300px;
+  margin-bottom: 80px; /* push circle + logo upward */
 }
 
-/* Emoji circle container */
-.emoji-circle {
+#circleContainer img {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 0;
-  height: 0;
-}
-
-.emoji-circle div {
-  position: absolute;
-  font-size: 70px;
   transform: translate(-50%, -50%);
-  text-shadow: 2px 2px 2px #000;
+  max-width: 120px;
+  z-index: 2;
 }
 
-/* Bottom text */
-#iconLayout .text {
+.emoji {
+  position: absolute;
+  font-size: 60px;
+  transform: translate(-50%, -50%);
+}
+
+#bottomText {
   position: absolute;
   bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
+  width: 100%;
   text-align: center;
-  z-index: 2;
+  font-size: 20px;
+  line-height: 1.5;
+  color: black;
+  padding: 0 20px;
 }
 </style>
 </head>
@@ -140,21 +127,18 @@ body {
 
 <!-- Final screen -->
 <div id="win">
-  <div id="iconLayout">
-    <div class="center-container">
-      <!-- Logo -->
-      <div class="logo">
-        <img src="a faliure management.png" alt="RHAC Logo">
-      </div>
-      <!-- Emoji circle -->
-      <div class="emoji-circle" id="emojiCircle"></div>
-    </div>
-
-    <!-- Bottom text -->
-    <div class="text">
-      <p>Thank you for meeting with me.</p>
-      <p>These icons represent RHAC’s values that inspire me to learn and grow.</p>
-    </div>
+  <div id="circleContainer">
+    <img src="a faliure management.png" alt="RHAC Logo">
+    <div class="emoji" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(0deg) translate(140px) rotate(0deg);">⭐</div>
+    <div class="emoji" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(60deg) translate(140px) rotate(-60deg);">🎉</div>
+    <div class="emoji" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(120deg) translate(140px) rotate(-120deg);">∞</div>
+    <div class="emoji" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(180deg) translate(140px) rotate(-180deg);">🛣️</div>
+    <div class="emoji" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(240deg) translate(140px) rotate(-240deg);">👨‍👩‍👧</div>
+    <div class="emoji" style="top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(300deg) translate(140px) rotate(-300deg);">🏠</div>
+  </div>
+  <div id="bottomText">
+    <p>Thank you for meeting with me.</p>
+    <p>These icons represent RHAC’s values that inspire me to learn and grow.</p>
   </div>
 </div>
 
@@ -162,7 +146,6 @@ body {
 <audio id="finalSound" src="sound2.mp3"></audio>
 
 <script>
-// Matching game
 const game = document.getElementById("game");
 const win = document.getElementById("win");
 const message = document.getElementById("message");
@@ -170,6 +153,7 @@ const popSound = document.getElementById("popSound");
 const finalSound = document.getElementById("finalSound");
 
 const logos = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
+
 const descriptions = {
   "⭐": "Excellence in Education – Preparing students for purposeful lives.",
   "🎉": "Values for Life – Living full, productive and purposeful lives.",
@@ -181,9 +165,11 @@ const descriptions = {
 
 let cardsArray = [...logos, ...logos];
 cardsArray.sort(() => Math.random() - 0.5);
+
 let selected = [];
 let matchedCount = 0;
 
+// Build grid
 cardsArray.forEach(symbol => {
   const card = document.createElement("div");
   card.classList.add("card");
@@ -201,6 +187,11 @@ function selectCard(card){
 
   if(selected.length === 2){
     const [c1, c2] = selected;
+
+    // Play pop sound immediately (mobile safe)
+    popSound.currentTime = 0;
+    popSound.play().catch(e => console.log("Sound blocked:", e));
+
     if(c1.dataset.symbol === c2.dataset.symbol){
       c1.classList.remove("selected");
       c2.classList.remove("selected");
@@ -208,20 +199,15 @@ function selectCard(card){
       c2.classList.add("matched");
       matchedCount += 2;
 
-      // Show message
+      // Show message with pop animation
       message.textContent = descriptions[c1.dataset.symbol];
       message.classList.add("pop");
       setTimeout(()=> message.classList.remove("pop"), 400);
-
-      // Play sound
-      popSound.currentTime = 0;
-      popSound.play();
 
       if(matchedCount === cardsArray.length){
         setTimeout(()=>{
           win.classList.add("show");
           finalSound.play();
-          createEmojiCircle();
         },500);
       }
     } else {
@@ -232,27 +218,6 @@ function selectCard(card){
     }
     selected = [];
   }
-}
-
-// Function to create emojis around the logo
-function createEmojiCircle() {
-  const circle = document.getElementById("emojiCircle");
-  const radius = 120; // distance from logo center
-  const centerX = 0;
-  const centerY = 0;
-  const emojiArray = ["⭐", "🎉", "∞", "🛣️", "👨‍👩‍👧", "🏠"];
-  const count = emojiArray.length;
-
-  emojiArray.forEach((emoji, i) => {
-    const angle = (i / count) * 2 * Math.PI;
-    const x = centerX + radius * Math.cos(angle);
-    const y = centerY + radius * Math.sin(angle);
-    const div = document.createElement("div");
-    div.textContent = emoji;
-    div.style.left = x + "px";
-    div.style.top = y + "px";
-    circle.appendChild(div);
-  });
 }
 </script>
 
