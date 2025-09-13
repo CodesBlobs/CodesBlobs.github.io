@@ -36,10 +36,10 @@ body {
 
 #game {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: 15px;
   width: 100%;
-  max-width: 450px;
+  max-width: 450px; /* keeps cards reasonable on desktop */
 }
 
 .card {
@@ -51,7 +51,7 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: clamp(32px, 8vw, 60px);
+  font-size: clamp(32px, 6vw, 60px);
   line-height: 1;
   color: black;
   transition: background 0.3s, transform 0.3s;
@@ -101,7 +101,7 @@ body {
 
 /* Logo */
 #iconLayout .logo img {
-  max-width: min(180px, 50vw);
+  max-width: 250px;
   height: auto;
   position: relative;
   z-index: 2;
@@ -110,13 +110,13 @@ body {
 /* Emoji circle */
 .emoji-circle {
   position: relative;
-  width: 100%;
-  height: 0; /* we’ll use JS to position emojis around logo */
+  width: 0;
+  height: 0;
   margin-top: 20px;
 }
 .emoji-circle div {
   position: absolute;
-  font-size: clamp(30px, 6vw, 70px);
+  font-size: clamp(30px, 5vw, 70px);
   transform: translate(-50%, -50%);
   text-shadow: 2px 2px 2px #000;
 }
@@ -252,8 +252,8 @@ function createEmojiCircle() {
   const centerX = rect.width / 2;
   const centerY = rect.height / 2;
 
-  // radius scales with screen width
-  const radius = Math.min(120, rect.width * 1.5);
+  // radius scales with screen width but caps at 120px
+  const radius = Math.min(120, rect.width * 1.2);
 
   emojiArray.forEach((emoji, i) => {
     const angle = (i / count) * 2 * Math.PI;
