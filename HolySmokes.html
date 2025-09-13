@@ -80,13 +80,32 @@ body {
 }
 #win.show { opacity:1; pointer-events: all; }
 
-#iconLayout .center-container { position: relative; margin-bottom:20px; text-align:center; }
-#iconLayout .logo img { max-width: 250px; height:auto; position: relative; z-index:2; }
+#iconLayout .center-container {
+  position: relative;
+  margin-bottom:20px;
+  text-align:center;
+  width: 250px;
+  height: 250px; /* container square */
+}
 
-.emoji-circle { position: relative; width: 100%; height: 0; margin-top:20px; }
+#iconLayout .logo img {
+  position: absolute;
+  top:50%;
+  left:50%;
+  transform: translate(-50%, -50%);
+  max-width: 120px;
+  z-index:2;
+}
+
+.emoji-circle {
+  position: absolute;
+  top:0; left:0;
+  width: 100%;
+  height: 100%;
+}
 .emoji-circle div {
   position: absolute;
-  font-size: clamp(30px,5vw,70px);
+  font-size: clamp(24px,5vw,50px);
   transform: translate(-50%,-50%);
   text-shadow: 2px 2px 2px #000;
 }
@@ -97,12 +116,6 @@ body {
   font-size: clamp(12px,4vw,18px);
   max-width:90%;
   line-height:1.4;
-}
-
-@media(max-width:400px){
-  #game { max-width:320px; gap:8px; }
-  .emoji-circle div { font-size: clamp(24px,5vw,50px); }
-  #iconLayout .text { margin-top:10px; }
 }
 </style>
 </head>
@@ -130,7 +143,7 @@ body {
 <audio id="finalSound" src="sound2.mp3"></audio>
 
 <script>
-// Game logic
+// Matching game logic
 const game = document.getElementById("game");
 const win = document.getElementById("win");
 const message = document.getElementById("message");
@@ -182,17 +195,16 @@ function selectCard(card){
   }
 }
 
-// Proper circular emoji layout
+// Emoji circle around logo
 function createEmojiCircle(){
   const circle=document.getElementById("emojiCircle");
   circle.innerHTML="";
-  const emojiArray = ["⭐","🎉","∞","🛣️","👨‍👩‍👧","🏠"];
+  const emojiArray=["⭐","🎉","∞","🛣️","👨‍👩‍👧","🏠"];
   const count = emojiArray.length;
-  const logo = document.querySelector("#iconLayout .logo");
-  const logoRect = logo.getBoundingClientRect();
-  const centerX = logoRect.width/2;
-  const centerY = logoRect.height/2;
-  const radius = Math.min(120, logoRect.width*1.2);
+  const container = document.querySelector("#iconLayout .center-container");
+  const centerX = container.offsetWidth/2;
+  const centerY = container.offsetHeight/2;
+  const radius = Math.min(centerX, centerY) * 0.9;
 
   emojiArray.forEach((emoji,i)=>{
     const angle = (i/count)*2*Math.PI;
@@ -206,7 +218,7 @@ function createEmojiCircle(){
   });
 }
 
-// Recalculate on resize
+// Recalculate on window resize
 window.addEventListener("resize", ()=>{
   if(win.classList.contains("show")) createEmojiCircle();
 });
