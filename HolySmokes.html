@@ -89,22 +89,22 @@ body {
   pointer-events: all;
 }
 
-/* Container for logo + circle, moved upward */
+/* Container for logo + emoji circle moved upward */
 #iconLayout .center-container {
   position: absolute;
-  top: 25%; /* move upward */
+  top: 20%; /* move the logo and emoji circle upward */
   left: 50%;
   transform: translateX(-50%);
   text-align: center;
   z-index: 2;
 }
 
-/* Central logo stays in the middle */
+/* Central logo */
 #iconLayout .logo img {
   max-width: 200px;
 }
 
-/* Emoji circle */
+/* Emoji circle inside the same container */
 .emoji-circle {
   position: relative;
   width: 350px;  /* diameter of circle */
@@ -145,7 +145,7 @@ body {
         <img src="a faliure management.png" alt="RHAC Logo">
       </div>
 
-      <!-- Emoji circle -->
+      <!-- Emoji circle (moves with logo) -->
       <div class="emoji-circle">
         <div style="top:0%; left:50%;">⭐</div>
         <div style="top:15%; left:85%;">🎉</div>
