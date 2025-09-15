@@ -1,22 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Edu+NSW+ACT+Cursive:wght@400..700&display=swap" rel="stylesheet">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RHAC Values Matching Game</title>
 <style>
 body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+#startScreen {
   display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url("xavxlyslys.JPG") no-repeat center center fixed;
+  background-size: 100% 150%
+}
+
+#startButton {
+    font-weight: bold;
+  text-align: center;
+  width: 100px; height: 50px;
+  background: transparent;
+  color: rgb(9, 7, 124);
+  border: none;
+  font-size: 40px;
+  border-radius: 12px;
+  position: relative;
+  top: 375px;
+  left: 20px;
+  cursor: pointer;
+
+
+}
+
+#gameContainer {
+  display: none;
   flex-direction: column;
   align-items: center;
   height: 100vh;
-  margin: 0;
   padding: 20px;
-  font-family: Arial, sans-serif;
-  color: black;
   background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center fixed;
-  background-size: cover;
+  background-size:contain;
 }
+
 #message{
     align-items: center;
     text-align: top;
@@ -61,7 +93,9 @@ body {
 .card.emoji {
   font-size: 40px; /* bigger emoji */
 }
-
+#perseverance {
+  font-size: 17px;
+}
 .card.selected {
   background: #ccc;
 }
@@ -125,24 +159,30 @@ body {
 </head>
 <body>
 
-<div id="message">Match the values to their emojis!</div>
-<div id="game"></div>
+<div id="startScreen">
+  <button id="startButton">Start</button>
+</div>
 
-<!-- Final screen -->
-<div id="win">
-    <p>Thank you for meeting with me.</p>
-    <p>These icons represent RHAC’s values that</p>
-    <p>inspire me to learn and grow.</p>
-  <div id="iconLayout">
-    <img src="a faliure management.png" alt="RHAC Logo">
-    <div class="circle-emoji" style="top:0%; left:50%;">🤝</div>
-    <div class="circle-emoji" style="top:20%; left:85%;">🕊️</div>
-    <div class="circle-emoji" style="top:50%; left:100%;">🌱</div>
-    <div class="circle-emoji" style="top:80%; left:85%;">💖</div>
-    <div class="circle-emoji" style="top:100%; left:50%;">🫂</div>
-    <div class="circle-emoji" style="top:80%; left:15%;">💪</div>
-    <div class="circle-emoji" style="top:50%; left:0%;">🏃‍♂️</div>
-    <div class="circle-emoji" style="top:20%; left:15%;">⭐</div>
+<div id="gameContainer">
+  <div id="message">Match the values to their emojis!</div>
+  <div id="game"></div>
+
+  <!-- Final screen -->
+  <div id="win">
+      <p>Thank you for meeting with me.</p>
+      <p>These icons represent RHAC’s values</p>
+      <p>that inspire me to learn and grow.</p>
+    <div id="iconLayout">
+      <img src="a faliure management.png" alt="RHAC Logo">
+      <div class="circle-emoji" style="top:0%; left:50%;">🤝</div>
+      <div class="circle-emoji" style="top:20%; left:85%;">🕊️</div>
+      <div class="circle-emoji" style="top:50%; left:100%;">🌱</div>
+      <div class="circle-emoji" style="top:80%; left:85%;">💖</div>
+      <div class="circle-emoji" style="top:100%; left:50%;">🫂</div>
+      <div class="circle-emoji" style="top:80%; left:15%;">💪</div>
+      <div class="circle-emoji" style="top:50%; left:0%;">🏃‍♂️</div>
+      <div class="circle-emoji" style="top:20%; left:15%;">⭐</div>
+    </div>
   </div>
 </div>
 
@@ -150,6 +190,15 @@ body {
 <audio id="finalSound" src="sound2.mp3"></audio>
 
 <script>
+const startButton = document.getElementById("startButton");
+const startScreen = document.getElementById("startScreen");
+const gameContainer = document.getElementById("gameContainer");
+
+startButton.addEventListener("click", () => {
+  startScreen.style.display = "none";
+  gameContainer.style.display = "flex";
+});
+
 const game = document.getElementById("game");
 const win = document.getElementById("win");
 const message = document.getElementById("message");
