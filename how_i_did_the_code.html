@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matching Game Challenges</title>
+    <style>
+        /* General styles */
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background-color: #f9f9f9;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4a4a4a;
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        /* Card / emoji styling example */
+        .card {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive text and layout */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .card {
+                font-size: 1.3rem;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            p {
+                font-size: 0.95rem;
+            }
+
+            .card {
+                font-size: 1.1rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>Challenges I Faced Making the Game</h1>
+
+    <p>
+        When I was making my matching games, I ran into a bunch of problems. The cards kept getting super big on my computer and tiny on my phone, so I had to figure out how to make them look good for both. The emojis were all over the place! Sometimes they were under the logo, sometimes they lined up like a boring row, and I just wanted them to circle around the logo. That took forever to fix.
+    </p>
+
+    <p>
+        The background image didn’t fill the screen on my phone at first, which was super annoying. The cards were way too big, and the words looked fat, so I had to shrink them and make the fonts fit better. I also wanted the emojis bigger than the words but still fit on the cards, and I wanted the start button to play a sound, which took me a while to figure out.
+    </p>
+
+    <p>
+        Making the matching logic work was tricky too. I had to make sure two cards matched before showing a message and playing a sound, and if they didn’t, they had to flip back. Plus, making everything move nicely and not break when you click too fast was really hard. But I didn’t give up! I kept trying different ideas, fixing the circle, and making the cards scale, and finally it all works now. It’s still not perfect, but it’s way better than before.
+    </p>
+
+    <!-- Example cards -->
+    <div class="card">😀 Emoji Card</div>
+    <div class="card">🎮 Emoji Card</div>
+</body>
+</html>

@@ -181,6 +181,7 @@ body {
       <p>Thank you for meeting with me.</p>
       <p>These icons are RHAC’s values</p>
       <p>that inspire me to learn and grow.</p>
+      <a href="how_i_did_the_code.html"></a>
     <div id="iconLayout">
       <img src="a faliure management.png" alt="RHAC Logo">
       <div class="circle-emoji" style="top:0%; left:50%;">🤝</div>
@@ -275,14 +276,11 @@ function selectCard(card){
       c1.classList.remove("selected"); c2.classList.remove("selected");
       c1.classList.add("matched"); c2.classList.add("matched");
       matchedCount += 2;
-
       message.textContent = c1.dataset.yap;
       message.classList.add("pop");
       setTimeout(()=> message.classList.remove("pop"), 400);
-
       popSound.currentTime = 0;
       popSound.play();
-
       if(matchedCount === cardsArray.length){
         setTimeout(()=>{
           win.classList.add("show");
@@ -299,6 +297,5 @@ function selectCard(card){
   }
 }
 </script>
-
 </body>
 </html>
