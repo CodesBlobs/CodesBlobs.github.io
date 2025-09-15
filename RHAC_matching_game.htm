@@ -28,7 +28,7 @@ body {
 #startButton {
   font-weight: bold;
   text-align: center;
-  background: #909193; /* solid blue */
+  background: #86898c; /* solid blue */
   color: white;
   border: none;
   font-size: 7vw; /* responsive font size for mobile */
@@ -80,33 +80,31 @@ body {
 /* Responsive game grid & cards */
 #game {
   display: grid;
-  grid-template-columns: repeat(4, 20vw); /* responsive width */
-  grid-gap: 3vw; /* responsive spacing */
+  grid-template-columns: repeat(4, 70px);
+  grid-gap: 10px;
 }
 
 .card {
-  width: 20vw;   /* responsive width */
-  height: 20vw;  /* responsive height to keep square shape */
+  width: 70px;
+  height: 70px;
   background: white;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 4vw; /* responsive font size for mobile */
+  font-size: 4vw; /* mobile responsive font size */
   color: black;
   text-align: center;
-  padding: 1vw;
+  padding: 5px;
   transition: background 0.3s, transform 0.3s;
 }
-
 .card.emoji {
-  font-size: 9vw; /* bigger emoji but responsive */
+  font-size: 10vw; /* bigger emoji, responsive */
 }
 #perseverance {
-  font-size: 3vw; /* slightly bigger for the longer word */
+  font-size: 3vw;
 }
-
 .card.selected {
   background: #ccc;
 }
@@ -199,13 +197,18 @@ body {
 
 <audio id="popSound" src="sound1.mp3"></audio>
 <audio id="finalSound" src="sound2.mp3"></audio>
+<audio id="gameStartSound" src="gamestart.mp3"></audio>
 
 <script>
 const startButton = document.getElementById("startButton");
 const startScreen = document.getElementById("startScreen");
 const gameContainer = document.getElementById("gameContainer");
+const gameStartSound = document.getElementById("gameStartSound");
 
 startButton.addEventListener("click", () => {
+  gameStartSound.currentTime = 0;
+  gameStartSound.volume = 1.0;
+  gameStartSound.play();
   startScreen.style.display = "none";
   gameContainer.style.display = "flex";
 });
@@ -229,7 +232,7 @@ const pairs = [
 
 let cardsArray = [];
 pairs.forEach(p => {
-  if(p.word === "Perseverance"){
+  if(p.word === "Perseverance" | p.word==="Resilience" | p.word==="Compassion"){
     cardsArray.push({type:"word", value:p.word, yap:p.yap, id:"perseverance"});
   } else {
     cardsArray.push({type:"word", value:p.word, yap:p.yap});
