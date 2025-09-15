@@ -13,30 +13,38 @@ body {
   font-family: Arial, sans-serif;
 }
 
+/* Start screen responsive for mobile */
 #startScreen {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: url("xavxlyslys.JPG") no-repeat center center fixed;
-  background-size: 100% 150%
+  width: 100vw;
+  background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center;
+  background-size: cover; /* fills screen without white space */
+  flex-direction: column;
 }
 
 #startButton {
-    font-weight: bold;
+  font-weight: bold;
   text-align: center;
-  width: 100px; height: 50px;
-  background: transparent;
-  color: rgb(9, 7, 124);
+  background: #007bff; /* solid blue */
+  color: white;
   border: none;
-  font-size: 40px;
+  font-size: 7vw; /* responsive font size for mobile */
+  padding: 12px 24px;
   border-radius: 12px;
-  position: relative;
-  top: 375px;
-  left: 20px;
   cursor: pointer;
+  width: 50vw; /* responsive width */
+  max-width: 250px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease;
+  position: relative;
+  top:90vw; /* position near bottom on mobile */
+}
 
-
+#startButton:active {
+  transform: scale(0.95);
 }
 
 #gameContainer {
@@ -45,8 +53,8 @@ body {
   align-items: center;
   height: 100vh;
   padding: 20px;
-  background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center fixed;
-  background-size:contain;
+  background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center;
+  background-size: cover; /* full screen background */
 }
 
 #message{
@@ -69,33 +77,36 @@ body {
   opacity: 1;
 }
 
+/* Responsive game grid & cards */
 #game {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
-  grid-gap: 15px;
+  grid-template-columns: repeat(4, 20vw); /* responsive width */
+  grid-gap: 3vw; /* responsive spacing */
 }
 
 .card {
-  width: 100px;
-  height: 100px;
+  width: 20vw;   /* responsive width */
+  height: 20vw;  /* responsive height to keep square shape */
   background: white;
   border-radius: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 16px; /* default word size */
+  font-size: 4vw; /* responsive font size for mobile */
   color: black;
   text-align: center;
-  padding: 5px;
+  padding: 1vw;
   transition: background 0.3s, transform 0.3s;
 }
+
 .card.emoji {
-  font-size: 40px; /* bigger emoji */
+  font-size: 9vw; /* bigger emoji but responsive */
 }
 #perseverance {
-  font-size: 17px;
+  font-size: 3vw; /* slightly bigger for the longer word */
 }
+
 .card.selected {
   background: #ccc;
 }
@@ -170,7 +181,7 @@ body {
   <!-- Final screen -->
   <div id="win">
       <p>Thank you for meeting with me.</p>
-      <p>These icons represent RHAC’s values</p>
+      <p>These icons are RHAC’s values</p>
       <p>that inspire me to learn and grow.</p>
     <div id="iconLayout">
       <img src="a faliure management.png" alt="RHAC Logo">
