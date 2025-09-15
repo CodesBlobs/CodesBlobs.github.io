@@ -17,7 +17,7 @@ body {
   background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center fixed;
   background-size: cover;
 }
-#yap{
+#message{
     align-items: center;
     text-align: top;
 }
@@ -52,7 +52,7 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  font-size: 17px; /* word size */
+  font-size: 16px; /* default word size */
   color: black;
   text-align: center;
   padding: 5px;
@@ -61,6 +61,7 @@ body {
 .card.emoji {
   font-size: 40px; /* bigger emoji */
 }
+
 .card.selected {
   background: #ccc;
 }
@@ -119,11 +120,6 @@ body {
   transform: translateX(-50%);
   text-align: center;
   z-index: 2;
-
-}
-#yap{
-    
-    align-self: top center;
 }
 </style>
 </head>
@@ -134,9 +130,9 @@ body {
 
 <!-- Final screen -->
 <div id="win">
-    <p id="yap">Thank you for meeting with me.</p>
-    <p id="yap">These icons represent RHAC’s values that</p>
-    <p id="yap">inspire me to learn and grow.</p>
+    <p>Thank you for meeting with me.</p>
+    <p>These icons represent RHAC’s values that</p>
+    <p>inspire me to learn and grow.</p>
   <div id="iconLayout">
     <img src="a faliure management.png" alt="RHAC Logo">
     <div class="circle-emoji" style="top:0%; left:50%;">🤝</div>
@@ -147,48 +143,19 @@ body {
     <div class="circle-emoji" style="top:80%; left:15%;">💪</div>
     <div class="circle-emoji" style="top:50%; left:0%;">🏃‍♂️</div>
     <div class="circle-emoji" style="top:20%; left:15%;">⭐</div>
-
-    
-
   </div>
 </div>
 
-<audio id="popSound"></audio>
-<audio id="finalSound"></audio>
+<audio id="popSound" src="sound1.mp3"></audio>
+<audio id="finalSound" src="sound2.mp3"></audio>
 
 <script>
-// Detect iOS
-const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-const popSound = document.getElementById("popSound");
-const finalSound = document.getElementById("finalSound");
-
-// Assign correct sources
-if (isIOS) {
-  popSound.src = "sound1.m4a";
-  finalSound.src = "sound2.m4a";
-} else {
-  popSound.src = "sound1.mp3";
-  finalSound.src = "sound2.mp3";
-}
-
-// Unlock audio once
-function unlockAudioOnce() {
-  document.removeEventListener('touchstart', unlockAudioOnce);
-  document.removeEventListener('click', unlockAudioOnce);
-  [popSound, finalSound].forEach(sound => {
-    sound.play().then(() => {
-      sound.pause();
-      sound.currentTime = 0;
-    }).catch(()=>{});
-  });
-}
-document.addEventListener('touchstart', unlockAudioOnce, {once:true, passive:true});
-document.addEventListener('click', unlockAudioOnce, {once:true});
-
 const game = document.getElementById("game");
 const win = document.getElementById("win");
 const message = document.getElementById("message");
+
+const popSound = document.getElementById("popSound");
+const finalSound = document.getElementById("finalSound");
 
 const pairs = [
   { word: "Respect", emoji: "🤝", yap: "Respect is about valuing others." },
@@ -202,7 +169,11 @@ const pairs = [
 
 let cardsArray = [];
 pairs.forEach(p => {
-  cardsArray.push({type:"word", value:p.word, yap:p.yap});
+  if(p.word === "Perseverance"){
+    cardsArray.push({type:"word", value:p.word, yap:p.yap, id:"perseverance"});
+  } else {
+    cardsArray.push({type:"word", value:p.word, yap:p.yap});
+  }
   cardsArray.push({type:"emoji", value:p.emoji, yap:p.yap});
 });
 cardsArray.sort(() => Math.random() - 0.5);
@@ -218,6 +189,7 @@ cardsArray.forEach(item => {
   card.dataset.value = item.value;
   card.dataset.type = item.type;
   card.dataset.yap = item.yap;
+  if(item.id) card.id = item.id;
   if(item.type === "emoji") card.classList.add("emoji");
   card.addEventListener("click", () => selectCard(card));
   game.appendChild(card);
@@ -246,12 +218,12 @@ function selectCard(card){
       setTimeout(()=> message.classList.remove("pop"), 400);
 
       popSound.currentTime = 0;
-      popSound.play().catch(()=>{});
+      popSound.play();
 
       if(matchedCount === cardsArray.length){
         setTimeout(()=>{
           win.classList.add("show");
-          finalSound.play().catch(()=>{});
+          finalSound.play();
         },500);
       }
     } else {
