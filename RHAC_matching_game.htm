@@ -103,7 +103,22 @@ body {
   font-size: 10vw; /* bigger emoji, responsive */
 }
 #perseverance {
-  font-size: 3vw;
+  font-size: 3vw; 
+}
+#yap {
+  text-align: center;          /* center text horizontally */
+  max-width: 90vw;             /* fit screen width on mobile */
+  font-size: 4vw;              /* responsive font size */
+  line-height: 1.4;            /* better spacing between lines */
+  margin-bottom: 20px;
+  position: relative;
+  right: 5vw;         /* spacing from icons */
+}
+@media(min-width: 600px){
+  #yap {
+    font-size: 20px;           /* normal size for larger screens */
+    max-width: 500px;
+  }
 }
 .card.selected {
   background: #ccc;
@@ -143,6 +158,9 @@ body {
   width: 300px;
   height: 300px;
   margin: auto;
+  align-self: center;
+  right: 10px;
+
 }
 #iconLayout img {
   max-width: 120px;
@@ -178,10 +196,13 @@ body {
 
   <!-- Final screen -->
   <div id="win">
-      <p>Thank you for meeting with me.</p>
-      <p>These icons are RHAC’s values</p>
-      <p>that inspire me to learn and grow.</p>
+    <div id="yap">
+      <p>Thank you for meeting with me.       </p>
+      <p>These icons are RHAC’s values        </p>
+      <p>that inspire me to learn and grow.   </p>
       <a href="how_i_did_the_code.html"></a>
+    </div>
+      
     <div id="iconLayout">
       <img src="a faliure management.png" alt="RHAC Logo">
       <div class="circle-emoji" style="top:0%; left:50%;">🤝</div>
