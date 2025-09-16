@@ -8,12 +8,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RHAC Values Matching Game</title>
 <style>
+/* same styles as before, untouched */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
 }
-
-/* Start screen responsive for mobile */
 #startScreen {
   display: flex;
   justify-content: center;
@@ -21,32 +20,27 @@ body {
   height: 100vh;
   width: 100vw;
   background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center;
-  background-size: cover; /* fills screen without white space */
+  background-size: cover;
   flex-direction: column;
 }
-
 #startButton {
   font-weight: bold;
   text-align: center;
-  background: #86898c; /* solid blue */
+  background: #86898c;
   color: white;
   border: none;
-  font-size: 7vw; /* responsive font size for mobile */
+  font-size: 7vw;
   padding: 12px 24px;
   border-radius: 12px;
   cursor: pointer;
-  width: 50vw; /* responsive width */
+  width: 50vw;
   max-width: 250px;
   box-shadow: 0 4px 6px rgba(0,0,0,0.2);
   transition: transform 0.2s ease;
   position: relative;
-  top:70vw; /* position near bottom on mobile */
+  top:70vw;
 }
-
-#startButton:active {
-  transform: scale(0.95);
-}
-
+#startButton:active { transform: scale(0.95); }
 #gameContainer {
   display: none;
   flex-direction: column;
@@ -54,12 +48,7 @@ body {
   height: 100vh;
   padding: 20px;
   background: url("830E4F9D-82B7-47C8-9E6B-3D24FA7DA741.jpeg") no-repeat center center;
-  background-size: cover; /* full screen background */
-}
-
-#message{
-    align-items: center;
-    text-align: top;
+  background-size: cover;
 }
 #message {
   font-size: 20px;
@@ -72,116 +61,43 @@ body {
   border-radius: 8px;
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
-.pop {
-  transform: scale(1.2);
-  opacity: 1;
-}
-
-/* Responsive game grid & cards */
-#game {
-  display: grid;
-  grid-template-columns: repeat(4, 70px);
-  grid-gap: 10px;
-}
-
+.pop { transform: scale(1.2); opacity: 1; }
+#game { display: grid; grid-template-columns: repeat(4, 70px); grid-gap: 10px; }
 .card {
-  width: 70px;
-  height: 70px;
+  width: 70px; height: 70px;
   background: white;
   border-radius: 12px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: flex; justify-content: center; align-items: center;
   cursor: pointer;
-  font-size: 4vw; /* mobile responsive font size */
-  color: black;
-  text-align: center;
-  padding: 5px;
+  font-size: 4vw;
+  color: black; text-align: center; padding: 5px;
   transition: background 0.3s, transform 0.3s;
 }
-.card.emoji {
-  font-size: 10vw; /* bigger emoji, responsive */
-}
-#perseverance {
-  font-size: 3vw; 
-}
-#yap {
-  text-align: center;          /* center text horizontally */
-  max-width: 90vw;             /* fit screen width on mobile */
-  font-size: 4vw;              /* responsive font size */
-  line-height: 1.4;            /* better spacing between lines */
-  margin-bottom: 20px;
-  position: relative;
-  right: 5vw;         /* spacing from icons */
-}
-@media(min-width: 600px){
-  #yap {
-    font-size: 20px;           /* normal size for larger screens */
-    max-width: 500px;
-  }
-}
-.card.selected {
-  background: #ccc;
-}
+.card.emoji { font-size: 10vw; }
+#perseverance { font-size: 3vw; }
+#yap { text-align: center; max-width: 90vw; font-size: 4vw; line-height: 1.4; margin-bottom: 20px; position: relative; right: 5vw; }
+@media(min-width: 600px){ #yap { font-size: 20px; max-width: 500px; } }
+.card.selected { background: #ccc; }
 .card.matched {
-  background: #2ecc71;
-  color: white;
-  pointer-events: none;
-  transform: scale(0);
-  transition: transform 0.5s ease;
+  background: #2ecc71; color: white; pointer-events: none;
+  transform: scale(0); transition: transform 0.5s ease;
 }
-
 #win {
-  position: fixed;
-  top: 0; left: 0;
+  position: fixed; top: 0; left: 0;
   width: 100%; height: 100%;
-  background: rgb(255, 255, 255);
-  color: black;
-  font-size: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.8s;
-  text-align: center;
-  padding: 20px;
+  background: rgb(255,255,255); color: black; font-size: 24px;
+  display: flex; justify-content: center; align-items: center; flex-direction: column;
+  opacity: 0; pointer-events: none; transition: opacity 0.8s;
+  text-align: center; padding: 20px;
 }
-#win.show {
-  opacity: 1;
-  pointer-events: all;
-}
-
+#win.show { opacity: 1; pointer-events: all; }
 #iconLayout {
-  position: relative;
-  width: 300px;
-  height: 300px;
-  margin: auto;
-  align-self: center;
-  right: 10px;
-
+  position: relative; width: 300px; height: 300px;
+  margin: auto; align-self: center; right: 10px;
 }
-#iconLayout img {
-  max-width: 120px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-#iconLayout .circle-emoji {
-  position: absolute;
-  font-size: 48px;
-  transform: translate(-50%, -50%);
-}
-#iconLayout .text {
-  position: absolute;
-  bottom: 30px;
-  left: calc(50% - 50px);
-  transform: translateX(-50%);
-  text-align: center;
-  z-index: 2;
-}
+#iconLayout img { max-width: 120px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+#iconLayout .circle-emoji { position: absolute; font-size: 48px; transform: translate(-50%, -50%); }
+#iconLayout .text { position: absolute; bottom: 30px; left: calc(50% - 50px); transform: translateX(-50%); text-align: center; z-index: 2; }
 </style>
 </head>
 <body>
@@ -194,15 +110,12 @@ body {
   <div id="message">Match the values to their emojis!</div>
   <div id="game"></div>
 
-  <!-- Final screen -->
   <div id="win">
     <div id="yap">
-      <p>Thank you for meeting with me.       </p>
-      <p>These icons are RHAC’s values        </p>
-      <p>that inspire me to learn and grow.   </p>
-      <a href="how_i_did_the_code.html"></a>
+      <p>Thank you for meeting with me.</p>
+      <p>These icons are RHAC’s values</p>
+      <p>that inspire me to learn and grow.</p>
     </div>
-      
     <div id="iconLayout">
       <img src="a faliure management.png" alt="RHAC Logo">
       <div class="circle-emoji" style="top:0%; left:50%;">🤝</div>
@@ -227,14 +140,6 @@ const startScreen = document.getElementById("startScreen");
 const gameContainer = document.getElementById("gameContainer");
 const gameStartSound = document.getElementById("gameStartSound");
 
-startButton.addEventListener("click", () => {
-  gameStartSound.currentTime = 0;
-  gameStartSound.volume = 1.0;
-  gameStartSound.play();
-  startScreen.style.display = "none";
-  gameContainer.style.display = "flex";
-});
-
 const game = document.getElementById("game");
 const win = document.getElementById("win");
 const message = document.getElementById("message");
@@ -242,6 +147,33 @@ const message = document.getElementById("message");
 const popSound = document.getElementById("popSound");
 const finalSound = document.getElementById("finalSound");
 
+// stop function only for pop sound
+function stop(audio) {
+  setTimeout(() => {
+    try {
+      audio.pause();
+      audio.currentTime = 0;
+    } catch (e) {
+      console.log("Stop error:", e);
+    }
+  }, 1000);
+}
+
+// start button
+startButton.addEventListener("click", () => {
+  gameStartSound.currentTime = 0;
+  gameStartSound.play();
+
+  // Unlock sounds silently for mobile
+  [popSound, finalSound].forEach(audio => {
+    audio.load(); // prepare but don't play
+  });
+
+  startScreen.style.display = "none";
+  gameContainer.style.display = "flex";
+});
+
+// game data
 const pairs = [
   { word: "Respect", emoji: "🤝", yap: "Respect is about valuing others." },
   { word: "Integrity", emoji: "🕊️", yap: "Integrity means being honest and fair." },
@@ -254,7 +186,7 @@ const pairs = [
 
 let cardsArray = [];
 pairs.forEach(p => {
-  if(p.word === "Perseverance" | p.word==="Resilience" | p.word==="Compassion"){
+  if(p.word === "Perseverance" || p.word==="Resilience" || p.word==="Compassion"){
     cardsArray.push({type:"word", value:p.word, yap:p.yap, id:"perseverance"});
   } else {
     cardsArray.push({type:"word", value:p.word, yap:p.yap});
@@ -266,7 +198,7 @@ cardsArray.sort(() => Math.random() - 0.5);
 let selected = [];
 let matchedCount = 0;
 
-// Build grid
+// build grid
 cardsArray.forEach(item => {
   const card = document.createElement("div");
   card.classList.add("card");
@@ -300,12 +232,15 @@ function selectCard(card){
       message.textContent = c1.dataset.yap;
       message.classList.add("pop");
       setTimeout(()=> message.classList.remove("pop"), 400);
+      
       popSound.currentTime = 0;
       popSound.play();
+      stop(popSound); // only pop sound stops after 1s
+
       if(matchedCount === cardsArray.length){
         setTimeout(()=>{
           win.classList.add("show");
-          finalSound.play();
+          finalSound.play(); // final sound plays fully
         },500);
       }
     } else {
